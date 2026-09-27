@@ -53,10 +53,17 @@
 		const speedUp = () => 1 + 0.15 * Math.floor((g.wave - 1) / 4);
 		const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
 
+		// a free place to spawn: away from the player and from everything already placed,
+		// so nothing touches on the first frame and the wave starts with the table's counts
+		let placed = [];
 		function spot(minFromPlayer) {
-			for(let i = 0; i < 200; i++) {
+			for(let i = 0; i < 400; i++) {
 				const x = 10 + rand() * (W - 20), y = 10 + rand() * (H - 20);
-				if(Math.hypot(x - g.player.x, y - g.player.y) > minFromPlayer) return { x, y };
+				if(Math.hypot(x - g.player.x, y - g.player.y) <= minFromPlayer) continue;
+				if(placed.some((o) => Math.hypot(o.x - x, o.y - y) < 12)) continue;
+				const pt = { x, y };
+				placed.push(pt);
+				return pt;
 			}
 			return { x: 10, y: 10 };
 		}
@@ -75,6 +82,7 @@
 					...Array(WAVES.kids[c]).fill('mikey')
 				]
 			};
+			placed = [];
 			g.grunts = Array.from({ length: counts.grunts }, () => Object.assign(spot(60), { t: Math.floor(rand() * 20) }));
 			g.electrodes = Array.from({ length: counts.electrodes }, () => spot(45));
 			g.hulks = Array.from({ length: counts.hulks }, () => Object.assign(spot(70), { t: 0, dx: 0, dy: 0 }));

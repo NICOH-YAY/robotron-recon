@@ -14,6 +14,17 @@ const { policy } = require('../js/greedy.js');
 	assert.strictEqual(obs.humans.length, 2, 'MOMCNT + DADCNT + KIDCNT wave 1');
 	console.log('ok   wave 1 counts match the wave table');
 }
+// 1b. wave 2 also starts with its column of the table, on every seed (nothing spawns touching)
+{
+	for(let seed = 1; seed <= 100; seed++) {
+		const s = Sim.create(seed), g = s.g;
+		g.grunts = [];
+		for(let i = 0; i < 61; i++) s.step({});
+		assert.strictEqual(g.wave, 2);
+		assert.deepStrictEqual([g.grunts.length, g.electrodes.length, g.hulks.length, g.humans.length], [17, 15, 5, 3], 'seed ' + seed);
+	}
+	console.log('ok   wave 2 counts match the wave table on 100 seeds');
+}
 // 2. the boundary: an observation holds only allowed fields, and nothing hidden leaks
 {
 	const env = makeEnv(7);

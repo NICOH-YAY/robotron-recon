@@ -52,6 +52,8 @@ A playing agent gets `observe()` and `act({ move, fire }, frames)` from `js/agen
 
 The first calibration let the baseline agent reach wave 78 without losing a life, which told me the grunts were far too slow. After recalibration it averages about wave 13 over 30 seeded games and loses all three lives in a little over a minute of game time. Its aim is perfect and its reactions are instant, so human players should die much earlier. That is `assumed` until people play it.
 
+The count check caught a second bug. The first version spawned grunts on top of electrodes, they killed each other on the first frame, and wave 2 started with 16 grunts and 14 electrodes where the table says 17 and 15. Spawns now keep 12 pixels apart, and the check runs on 100 seeds.
+
 ## Open questions
 
 - Does the electrode really score 0? The assembly says so on my reading, and an arcade playthrough would settle it.
